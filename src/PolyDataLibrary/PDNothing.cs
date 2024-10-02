@@ -33,13 +33,14 @@ public sealed class PDNothing : IPDObject, IPDValue, IPDMetaProperty, IPDRespons
             request.MetaProperty, 
             this);
 
-    public PDGetPropertyResponse GetProperty(PDGetPropertyRequest getPropertyRequest) {
-        return new PDGetPropertyResponse(
-            ResponseIndicator: PDResponseWellknown.Instance.NoValue,
-            MetaProperty: this,
-            ValueExists: false,
-            Value: this);
-    }
+    public IPDValue GetProperty(IPDMetaProperty property) => this;
+    // public PDGetPropertyResponse GetProperty(PDGetPropertyRequest getPropertyRequest) {
+    //     return new PDGetPropertyResponse(
+    //         ResponseIndicator: PDResponseWellknown.Instance.NoValue,
+    //         MetaProperty: this,
+    //         ValueExists: false,
+    //         Value: this);
+    // }
 
     public PDSetPropertyResponse SetProperty(PDSetPropertyRequest setPropertyRequest) {
         return new PDSetPropertyResponse(

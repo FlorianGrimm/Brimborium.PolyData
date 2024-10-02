@@ -6,7 +6,3 @@ global using global::System.Linq;
 global using global::System.Text;
 global using global::System.Threading.Tasks;
 global using global::Brimborium.PolyData;
-
-#if XUnit
-global using global::Xunit;
-#endif

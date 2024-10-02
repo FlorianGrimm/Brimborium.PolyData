@@ -3,18 +3,15 @@
 public interface IPDObject {
     Guid Uid { get; }
 
-    PDGetPropertyResponse GetProperty(PDGetPropertyRequest getPropertyRequest);
+    // PDGetPropertyResponse GetProperty(PDGetPropertyRequest getPropertyRequest);
+
+    IPDValue GetProperty(IPDMetaProperty property);
 
     PDSetPropertyResponse SetProperty(PDSetPropertyRequest setPropertyRequest);
 
     FlattenChangesResponse GetFlattenChanges();
     IPDObject Freeze();
     IPDObject Unfreeze();
-
-#if false
-    IPDObject SetProperty(IPDMetaProperty metaProperty, IPDValue value);
-    bool TryGetProperty(IPDMetaProperty metaProperty, [MaybeNullWhen(false)] out IPDValue result);
-#endif
 }
 
 public interface IPDValue {
@@ -42,11 +39,16 @@ public record PDSetPropertyRequest(
     IPDMetaProperty MetaProperty,
     IPDValue NextValue,
     PGFlowInfo FlowInfo
-    ) : IPDRequest;
+    ) : IPDRequest {
+    public PDSetPropertyRequest(
+        IPDMetaProperty MetaProperty,
+        IPDValue NextValue)
+        : this(MetaProperty, NextValue, new PGFlowInfo()) {
+    }
+}
 
 public record PDSetPropertyResponse(
     IPDResponseIndicator ResponseIndicator,
     IPDObject Result
-    ) : IPDResponse { 
+    ) : IPDResponse {
 }
-

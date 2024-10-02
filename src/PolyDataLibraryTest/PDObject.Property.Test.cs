@@ -2,7 +2,7 @@ namespace Brimborium.PolyData;
 
 public partial class PDObjectTest {
     [Fact]
-    public void PropertyÍsFrozenTest() {
+    public void PropertyIsFrozenTest() {
         PDMetaPropertyNamed propertyA = new("A");
         PDMetaPropertyNamed propertyB = new("B");
 
@@ -18,10 +18,13 @@ public partial class PDObjectTest {
         if (ReferenceEquals(a, b)) { Assert.Fail("a is the same as b"); }
         if (ReferenceEquals(a, c)) { Assert.Fail("a is the same as c"); }
         if (ReferenceEquals(b, c)) { Assert.Fail("b is the same as c"); }
+
+        Assert.Equal("Hello", c.GetProperty(property:propertyA).GetValue());
+        Assert.Equal("World", c.GetProperty(property:propertyB).GetValue());
     }
 
     [Fact]
-    public void PropertyÍsUnfrozenTest() {
+    public void PropertyIsUnfrozenTest() {
         PDMetaPropertyNamed propertyA = new("A");
         PDMetaPropertyNamed propertyB = new("B");
 

@@ -3,19 +3,12 @@
 partial class PDObject {
 
     public PDSetPropertyResponse SetProperty(PDSetPropertyRequest setPropertyRequest) {
-        PDGetPropertyResponse getPropertyResponse;
-        {
-            var getPropertyRequest = new PDGetPropertyRequest(
-                MetaProperty: setPropertyRequest.MetaProperty,
-                FlowInfo: setPropertyRequest.FlowInfo);
-            getPropertyResponse = this.GetProperty(getPropertyRequest);
-        }
+        var oldValue = this.GetProperty(setPropertyRequest.MetaProperty);
         PDMetaSetPropertyResponse metaSetPropertyResponse;
         {
             var metaSetPropertyRequest = new PDMetaSetPropertyRequest(
                 MetaProperty: setPropertyRequest.MetaProperty,
-                OldValueExists: getPropertyResponse.ValueExists,
-                OldValue: getPropertyResponse.Value,
+                OldValue: oldValue,
                 NextValue: setPropertyRequest.NextValue,
                 FlowInfo: setPropertyRequest.FlowInfo);
 
@@ -34,7 +27,7 @@ partial class PDObject {
             var valuesNext = this._Values.SetItem(
                     metaSetPropertyResponse.MetaProperty,
                     metaSetPropertyResponse.Value);
-
+            var changesNext = this._Changes.Add(setPropertyRequest);
             if (this._IsFrozen) {
                 return new PDSetPropertyResponse(
                     ResponseIndicator: metaSetPropertyResponse.ResponseIndicator,
@@ -43,12 +36,12 @@ partial class PDObject {
                         values: valuesNext,
                         previousState: this._PreviousState ?? this,
                         isFrozen: true,
-                        changes: this._Changes.Add(setPropertyRequest)
+                        changes: changesNext
                         )
                     );
             } else {
                 this._Values = valuesNext;
-                this._Changes = this._Changes.Add(setPropertyRequest);
+                this._Changes = changesNext;
                 return new PDSetPropertyResponse(
                     ResponseIndicator: metaSetPropertyResponse.ResponseIndicator,
                     Result: this
@@ -57,7 +50,15 @@ partial class PDObject {
         }
     }
 
-    public PDGetPropertyResponse GetProperty(PDGetPropertyRequest getPropertyRequest) {
+    public IPDValue GetProperty(IPDMetaProperty property) {
+        if (this._Values.TryGetValue(property, out var result)) {
+            return result;
+        } else {
+            return PDNothing.Empty;
+        }
+    }
+
+    public PDGetPropertyResponse HandleGetProperty(PDGetPropertyRequest getPropertyRequest) {
         if (this._Values.TryGetValue(getPropertyRequest.MetaProperty, out var result)) {
             return new PDGetPropertyResponse(
                 PDResponseWellknown.Instance.Success,

@@ -7,7 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <AssemblyName>Brimborium.PolyDataLibrary</AssemblyName>
+    <AssemblyName>Brimborium.PolyDataLibraryTest</AssemblyName>
     <RootNamespace>Brimborium.PolyData</RootNamespace>
     <DefineConstants>$(DefineConstants);XUnit</DefineConstants>
   </PropertyGroup>
@@ -23,6 +23,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PolyDataLibrary\PolyDataLibrary.csproj" />
   </ItemGroup>
 
 </Project>

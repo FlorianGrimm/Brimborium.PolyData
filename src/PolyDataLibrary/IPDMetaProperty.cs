@@ -5,7 +5,6 @@ public interface IPDMetaProperty: IEquatable<IPDMetaProperty> {
 }
 public record PDMetaSetPropertyRequest(
     IPDMetaProperty MetaProperty,
-    bool OldValueExists,
     IPDValue OldValue,
     IPDValue NextValue,
     PGFlowInfo FlowInfo
