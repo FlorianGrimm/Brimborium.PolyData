@@ -1,33 +1,38 @@
 ﻿namespace Brimborium.PolyData;
 
+
 public partial class PDObject : IPDObject {
     public static PDObject Create(
-        Guid? uid = default,
+        IPDObjectKey? uid = default,
+        IPDRepositoryKey? repositoryKey = default,
         ImmutableDictionary<IPDMetaProperty, IPDValue>? values = default,
         IPDObject? previousState = default,
         bool? isFrozen = default,
         ImmutableArray<PDSetPropertyRequest>? changes = default) {
         return new PDObject(
-            uid: uid.HasValue ? uid.Value : Guid.NewGuid(),
+            uid: uid is { } uidNN ? uidNN : new PDObjectKey(),
+            repositoryKey: repositoryKey,
             values: values ?? ImmutableDictionary<IPDMetaProperty, IPDValue>.Empty,
             previousState: previousState,
             isFrozen: isFrozen.GetValueOrDefault(),
             changes: changes ?? ImmutableArray<PDSetPropertyRequest>.Empty
             );
     }
+
+    private IPDRepositoryKey? _RepositoryKey;
     private ImmutableDictionary<IPDMetaProperty, IPDValue> _Values;
     private readonly IPDObject? _PreviousState;
     private bool _IsFrozen;
     private ImmutableArray<PDSetPropertyRequest> _Changes;
 
     public PDObject() {
-        this.Uid = Guid.NewGuid();
+        this.Uid = new PDObjectKey();
         this._Values = ImmutableDictionary<IPDMetaProperty, IPDValue>.Empty;
         this._PreviousState = default;
         this._Changes = ImmutableArray<PDSetPropertyRequest>.Empty;
     }
 
-    public PDObject(Guid uid) {
+    public PDObject(IPDObjectKey uid) {
         this.Uid = uid;
         this._Values = ImmutableDictionary<IPDMetaProperty, IPDValue>.Empty;
         this._PreviousState = default;
@@ -35,22 +40,42 @@ public partial class PDObject : IPDObject {
     }
 
     public PDObject(
-        Guid uid,
+        IPDObjectKey uid,
+        IPDRepositoryKey? repositoryKey,
         ImmutableDictionary<IPDMetaProperty, IPDValue> values,
         IPDObject? previousState,
         bool isFrozen,
         ImmutableArray<PDSetPropertyRequest> changes
         ) {
         this.Uid = uid;
+        this._RepositoryKey = repositoryKey;
         this._Values = values;
         this._PreviousState = previousState;
         this._IsFrozen = isFrozen;
         this._Changes = changes;
     }
 
-    public Guid Uid { get; }
+    public IPDObjectKey Uid { get; }
 
+    public IPDObject SetRepositoryKey(IPDRepositoryKey repositoryKey) {
+        if (this._IsFrozen) {
+            return new PDObject(
+                uid: this.Uid,
+                repositoryKey: repositoryKey,
+                values: this._Values,
+                previousState: this._PreviousState,
+                isFrozen: this._IsFrozen,
+                changes: this._Changes
+                );
+        } else { 
+            this._RepositoryKey = repositoryKey;
+            return this;
+        }
+    }
 
+    public IPDObject ClearRepositoryKey(IPDRepositoryKey repositoryKey) {
+        return this;
+    }
 
 #if false
     public IPDObject SetProperty(IPDMetaProperty metaProperty, IPDValue value) {

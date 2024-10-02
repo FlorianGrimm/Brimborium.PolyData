@@ -1,17 +1,22 @@
 ﻿namespace Brimborium.PolyData;
 
 public interface IPDObject {
-    Guid Uid { get; }
+    IPDObjectKey Uid { get; }
 
-    // PDGetPropertyResponse GetProperty(PDGetPropertyRequest getPropertyRequest);
+    IPDObject SetRepositoryKey(IPDRepositoryKey repositoryKey);
+
+    IPDObject ClearRepositoryKey(IPDRepositoryKey repositoryKey);
+
 
     IPDValue GetProperty(IPDMetaProperty property);
 
     PDSetPropertyResponse SetProperty(PDSetPropertyRequest setPropertyRequest);
 
-    FlattenChangesResponse GetFlattenChanges();
+
     IPDObject Freeze();
     IPDObject Unfreeze();
+
+    FlattenChangesResponse GetFlattenChanges();    
 }
 
 public interface IPDValue {

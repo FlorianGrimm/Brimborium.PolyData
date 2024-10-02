@@ -33,6 +33,7 @@ partial class PDObject {
                     ResponseIndicator: metaSetPropertyResponse.ResponseIndicator,
                     Result: new PDObject(
                         uid: this.Uid,
+                        repositoryKey: this._RepositoryKey,
                         values: valuesNext,
                         previousState: this._PreviousState ?? this,
                         isFrozen: true,

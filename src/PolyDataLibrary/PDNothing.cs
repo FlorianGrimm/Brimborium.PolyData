@@ -14,7 +14,7 @@ public sealed class PDNothing : IPDObject, IPDValue, IPDMetaProperty, IPDRespons
 
     public PDNothing() { }
 
-    public Guid Uid => Guid.Empty;
+    public IPDObjectKey Uid => new PDObjectKey(Guid.Empty);
 
     public string Message => string.Empty;
 
@@ -55,6 +55,10 @@ public sealed class PDNothing : IPDObject, IPDValue, IPDMetaProperty, IPDRespons
     public IPDObject Freeze() => this;
 
     public IPDObject Unfreeze() => this;
+
+    public IPDObject SetRepositoryKey(IPDRepositoryKey repositoryKey) => this;
+
+    public IPDObject ClearRepositoryKey(IPDRepositoryKey repositoryKey) => this;
 
 
     //public static bool operator ==(PDNothing left, PDNothing right)

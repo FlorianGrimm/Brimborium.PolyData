@@ -14,6 +14,7 @@ partial class PDObject {
             // no parent
             PDObject nextInstance = new PDObject(
                     uid: this.Uid,
+                    repositoryKey: this._RepositoryKey,
                     values: this._Values,
                     previousState: default,
                     isFrozen: this._IsFrozen,
@@ -48,6 +49,7 @@ partial class PDObject {
          
             PDObject nextInstance = new PDObject(
                     uid: this.Uid,
+                    repositoryKey: this._RepositoryKey,
                     values: (orginalDictProperty 
                             ?? (dictProperty?.ToImmutableDictionary()) 
                             ?? ImmutableDictionary<IPDMetaProperty, IPDValue>.Empty),
