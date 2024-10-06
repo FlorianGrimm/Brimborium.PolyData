@@ -11,7 +11,7 @@ public interface IPDRepository {
 }
 
 
-public record PDRepositoryResponse(
+public readonly record struct PDRepositoryResponse(
     PDRepository Repository,
     IPDObject Result
     );

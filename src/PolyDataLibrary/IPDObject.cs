@@ -8,9 +8,11 @@ public interface IPDObject {
     IPDObject ClearRepositoryKey(IPDRepositoryKey repositoryKey);
 
 
-    IPDValue GetProperty(IPDMetaProperty property);
+    IPDValue? GetProperty(IPDMetaProperty property);
+    IPDValue<T>? GetProperty<T>(IPDMetaProperty<T> property);
 
     PDSetPropertyResponse SetProperty(PDSetPropertyRequest setPropertyRequest);
+    PDSetPropertyResponse<T> SetProperty<T>(PDSetPropertyRequest<T> setPropertyRequest);
 
 
     IPDObject Freeze();
@@ -28,23 +30,28 @@ public interface IPDValue<T>
     T GetValueT();
 }
 
-public record PDGetPropertyRequest(
+public readonly record struct PDGetPropertyRequest(
     IPDMetaProperty MetaProperty,
     PGFlowInfo FlowInfo
     ) : IPDRequest;
 
-public record PDGetPropertyResponse(
+public readonly record struct PDGetPropertyResponse(
     IPDResponseIndicator ResponseIndicator,
     IPDMetaProperty MetaProperty,
     bool ValueExists,
-    IPDValue Value
+    IPDValue? Value
     ) : IPDResponse { }
 
-public record struct PDSetPropertyRequest(
+public interface IPDSetPropertyRequest : IPDRequest {
+    //IPDMetaProperty MetaProperty { get; }
+    //IPDValue NextValue { get; }
+}
+
+public readonly record struct PDSetPropertyRequest(
     IPDMetaProperty MetaProperty,
     IPDValue NextValue,
     PGFlowInfo FlowInfo
-    ) : IPDRequest {
+    ) : IPDRequest, IPDSetPropertyRequest {
     public PDSetPropertyRequest(
         IPDMetaProperty MetaProperty,
         IPDValue NextValue)
@@ -52,7 +59,26 @@ public record struct PDSetPropertyRequest(
     }
 }
 
-public record struct PDSetPropertyResponse(
+public readonly record struct PDSetPropertyResponse(
+    IPDResponseIndicator ResponseIndicator,
+    IPDObject Result
+    ) : IPDResponse {
+}
+
+
+public record class PDSetPropertyRequest<T>(
+    IPDMetaProperty<T> MetaProperty,
+    IPDValue<T> NextValue,
+    PGFlowInfo FlowInfo
+    ) : IPDRequest, IPDSetPropertyRequest {
+    public PDSetPropertyRequest(
+        IPDMetaProperty<T> MetaProperty,
+        IPDValue<T> NextValue)
+        : this(MetaProperty, NextValue, new PGFlowInfo()) {
+    }
+}
+
+public readonly record struct PDSetPropertyResponse<T>(
     IPDResponseIndicator ResponseIndicator,
     IPDObject Result
     ) : IPDResponse {

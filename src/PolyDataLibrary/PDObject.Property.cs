@@ -3,6 +3,10 @@
 partial class PDObject {
 
     public PDSetPropertyResponse SetProperty(PDSetPropertyRequest setPropertyRequest) {
+        throw new NotImplementedException();
+    }
+
+    public PDSetPropertyResponse<T> SetProperty<T>(PDSetPropertyRequest<T> setPropertyRequest) {
         var oldValue = this.GetProperty(setPropertyRequest.MetaProperty);
         PDMetaSetPropertyResponse metaSetPropertyResponse;
         {
@@ -17,7 +21,7 @@ partial class PDObject {
         }
 
         if (metaSetPropertyResponse.ResponseIndicator is IPDFaultResponse) {
-            return new PDSetPropertyResponse(
+            return new PDSetPropertyResponse<T>(
                 ResponseIndicator: metaSetPropertyResponse.ResponseIndicator,
                 Result: this
                 );
@@ -29,7 +33,7 @@ partial class PDObject {
                     metaSetPropertyResponse.Value);
             var changesNext = this._Changes.Add(setPropertyRequest);
             if (this._IsFrozen) {
-                return new PDSetPropertyResponse(
+                return new PDSetPropertyResponse<T>(
                     ResponseIndicator: metaSetPropertyResponse.ResponseIndicator,
                     Result: new PDObject(
                         uid: this.Uid,
@@ -43,7 +47,7 @@ partial class PDObject {
             } else {
                 this._Values = valuesNext;
                 this._Changes = changesNext;
-                return new PDSetPropertyResponse(
+                return new PDSetPropertyResponse<T>(
                     ResponseIndicator: metaSetPropertyResponse.ResponseIndicator,
                     Result: this
                     );
@@ -51,11 +55,15 @@ partial class PDObject {
         }
     }
 
-    public IPDValue GetProperty(IPDMetaProperty property) {
+    public IPDValue? GetProperty(IPDMetaProperty property) {
+        throw new NotImplementedException();
+    }
+
+    public IPDValue<T>? GetProperty<T>(IPDMetaProperty<T> property) {
         if (this._Values.TryGetValue(property, out var result)) {
-            return result;
+            return (IPDValue<T>)result;
         } else {
-            return PDNothing.Empty;
+            return default;
         }
     }
 
@@ -67,7 +75,7 @@ partial class PDObject {
         } else {
             return new PDGetPropertyResponse(
                 PDResponseWellknown.Instance.NoValue,
-                getPropertyRequest.MetaProperty, false, PDNothing.Empty);
+                getPropertyRequest.MetaProperty, false, default);
         }
     }
 }

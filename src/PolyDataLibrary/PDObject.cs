@@ -8,14 +8,14 @@ public partial class PDObject : IPDObject {
         ImmutableDictionary<IPDMetaProperty, IPDValue>? values = default,
         IPDObject? previousState = default,
         bool? isFrozen = default,
-        ImmutableArray<PDSetPropertyRequest>? changes = default) {
+        ImmutableArray<IPDSetPropertyRequest>? changes = default) {
         return new PDObject(
             uid: uid is { } uidNN ? uidNN : new PDObjectKey(),
             repositoryKey: repositoryKey,
             values: values ?? ImmutableDictionary<IPDMetaProperty, IPDValue>.Empty,
             previousState: previousState,
             isFrozen: isFrozen.GetValueOrDefault(),
-            changes: changes ?? ImmutableArray<PDSetPropertyRequest>.Empty
+            changes: changes ?? ImmutableArray<IPDSetPropertyRequest>.Empty
             );
     }
 
@@ -23,20 +23,20 @@ public partial class PDObject : IPDObject {
     private ImmutableDictionary<IPDMetaProperty, IPDValue> _Values;
     private readonly IPDObject? _PreviousState;
     private bool _IsFrozen;
-    private ImmutableArray<PDSetPropertyRequest> _Changes;
+    private ImmutableArray<IPDSetPropertyRequest> _Changes;
 
     public PDObject() {
         this.Uid = new PDObjectKey();
         this._Values = ImmutableDictionary<IPDMetaProperty, IPDValue>.Empty;
         this._PreviousState = default;
-        this._Changes = ImmutableArray<PDSetPropertyRequest>.Empty;
+        this._Changes = ImmutableArray<IPDSetPropertyRequest>.Empty;
     }
 
     public PDObject(IPDObjectKey uid) {
         this.Uid = uid;
         this._Values = ImmutableDictionary<IPDMetaProperty, IPDValue>.Empty;
         this._PreviousState = default;
-        this._Changes = ImmutableArray<PDSetPropertyRequest>.Empty;
+        this._Changes = ImmutableArray<IPDSetPropertyRequest>.Empty;
     }
 
     public PDObject(
@@ -45,7 +45,7 @@ public partial class PDObject : IPDObject {
         ImmutableDictionary<IPDMetaProperty, IPDValue> values,
         IPDObject? previousState,
         bool isFrozen,
-        ImmutableArray<PDSetPropertyRequest> changes
+        ImmutableArray<IPDSetPropertyRequest> changes
         ) {
         this.Uid = uid;
         this._RepositoryKey = repositoryKey;

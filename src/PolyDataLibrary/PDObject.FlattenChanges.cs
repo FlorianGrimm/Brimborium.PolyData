@@ -18,7 +18,7 @@ partial class PDObject {
                     values: this._Values,
                     previousState: default,
                     isFrozen: this._IsFrozen,
-                    changes: ImmutableArray<PDSetPropertyRequest>.Empty);
+                    changes: ImmutableArray<IPDSetPropertyRequest>.Empty);
             return new FlattenChangesResponse(
                 PrevInstance: default,
                 NextInstance: nextInstance,
@@ -29,7 +29,7 @@ partial class PDObject {
             PDObject prevInstance = this;
             ImmutableDictionary<IPDMetaProperty, IPDValue>? orginalDictProperty = this._Values;
             Dictionary<IPDMetaProperty, IPDValue>? dictProperty = default;
-            ImmutableArray<PDSetPropertyRequest> changes = this._Changes;
+            ImmutableArray<IPDSetPropertyRequest> changes = this._Changes;
 
             for(;prevInstance._PreviousState is PDObject previousState
                 ; prevInstance = previousState) {
@@ -55,7 +55,7 @@ partial class PDObject {
                             ?? ImmutableDictionary<IPDMetaProperty, IPDValue>.Empty),
                     previousState: default,
                     isFrozen: this._IsFrozen,
-                    changes: ImmutableArray<PDSetPropertyRequest>.Empty);
+                    changes: ImmutableArray<IPDSetPropertyRequest>.Empty);
             return new FlattenChangesResponse(
                 PrevInstance: prevInstance,
                 NextInstance: nextInstance,
@@ -67,4 +67,4 @@ partial class PDObject {
 public sealed record FlattenChangesResponse(
     IPDObject? PrevInstance,
     IPDObject NextInstance,
-    ImmutableArray<PDSetPropertyRequest> Changes);
+    ImmutableArray<IPDSetPropertyRequest> Changes);

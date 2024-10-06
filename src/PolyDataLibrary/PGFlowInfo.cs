@@ -1,16 +1,14 @@
-﻿
-
-namespace Brimborium.PolyData;
+﻿namespace Brimborium.PolyData;
 
 public record PGFlowInfo(
     Guid Uid
     ) {
     public PGFlowInfo() : this(Guid.NewGuid()) { }
 
-    public PDSetPropertyRequest SetPropertyRequest(IPDMetaProperty property, object? value) {
-        return new PDSetPropertyRequest(
+    public PDSetPropertyRequest<T> SetPropertyRequest<T>(IPDMetaProperty<T> property, T value) {
+        return new PDSetPropertyRequest<T>(
             property,
-            new PDValue(value),
+            new PDValue<T>(value),
             this
             );
     }
