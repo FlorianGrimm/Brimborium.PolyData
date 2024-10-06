@@ -40,7 +40,7 @@ public record PDGetPropertyResponse(
     IPDValue Value
     ) : IPDResponse { }
 
-public record PDSetPropertyRequest(
+public record struct PDSetPropertyRequest(
     IPDMetaProperty MetaProperty,
     IPDValue NextValue,
     PGFlowInfo FlowInfo
@@ -52,7 +52,7 @@ public record PDSetPropertyRequest(
     }
 }
 
-public record PDSetPropertyResponse(
+public record struct PDSetPropertyResponse(
     IPDResponseIndicator ResponseIndicator,
     IPDObject Result
     ) : IPDResponse {
